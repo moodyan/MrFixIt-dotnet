@@ -2,6 +2,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Mr Fix-It Jobs";
 }
+
+
 <div class="text-center">
     <h3>Our Current Jobs</h3>
     @Html.ActionLink("Add a new job", "Create")
@@ -13,17 +15,21 @@
         <ul>
             <li>@Job.Description</li>
         </ul>
+       
+            @if (Job.Worker == null)
+            {
+            <p>This job is unclaimed. 
+                @if (ViewBag.Worker != null)
+                {
+                    @Html.ActionLink("Claim This Job", "Claim", new { @text = @Job.Title, id = Job.JobId, @class = "btn" })
+                }
+            </p>
+            }
+            else
+            {
+                <p>This Job is claimed by @Job.Worker.FirstName @Job.Worker.LastName</p>
 
-        @*Make another if statement to only show this if user is authenticated*@
-        @if (Job.Worker == null)
-        {
-        <li class="btn">This job is unclaimed. @Html.ActionLink("Claim This Job", "Claim", new { @text = @Job.Title, id = Job.JobId })</li>
-        }
-        else
-        {
-            <li class="btn">This Job is claimed by @Job.Worker.FirstName @Job.Worker.LastName</li>
-
-        }
+            }
     </ul>
 
 

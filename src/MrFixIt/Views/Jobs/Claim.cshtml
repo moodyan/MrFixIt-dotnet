@@ -1,18 +1,42 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Claim Job";
-}
-@model MrFixIt.Models.Job
+﻿@model MrFixIt.Models.Job
 
-<h2>Would you like to do this job?</h2>
-<hr />
-@using (Html.BeginForm())
-{
-    @Html.HiddenFor(model => model.JobId)
-    @Html.HiddenFor(model => model.Title)
-    @Html.HiddenFor(model => model.Description)
+<script>
+    $(document).ready(function () {
+        $('.claim-form').submit(function (event) {
+            event.preventDefault();
+            $.ajax({
+                url: '@Url.Action("Claim")',
+                type: 'POST',
+                dataType: 'json',
+                data: $(this).serialize(),
+                success: function (result) {
+                    var resultMessage = 'You\'ve successfully claimed this job!';
+                    $('#result').html(resultMessage);
+                    $('#confirm-claim').hide();
+                }
+            });
+        });
+    });
+</script>
 
-    <h4>@Model.Title</h4>
-    <input type="submit" value="Claim" />
-}
-<p>@Html.ActionLink("Back to list", "Index")</p>
+<div id="confirm-claim">
+    <h2>Are you sure you want to claim this job?</h2>
+    <hr />
+    <form action="Create" class="claim-form">
+        <input type="text" name=@Model.JobId hidden/>
+        <input type="text" name=@Model.Title hidden/>
+        <input type="text" name=@Model.Description hidden/>
+        <button type="submit">Submit</button>
+    </form>
+
+    @*@using (Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.JobId)
+        @Html.HiddenFor(model => model.Title)
+        @Html.HiddenFor(model => model.Description)
+
+        <h4>@Model.Title</h4>
+        <input type="submit" value="Claim" />
+    }*@
+</div>
+<div id="result"></div>

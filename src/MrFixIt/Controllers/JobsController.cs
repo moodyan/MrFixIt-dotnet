@@ -14,6 +14,7 @@ namespace MrFixIt.Controllers
         
         public IActionResult Index()
         {
+            ViewBag.Worker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
             return View(db.Jobs.Include(job => job.Worker).ToList());
         }
 
@@ -37,13 +38,26 @@ namespace MrFixIt.Controllers
         }
         //allows workers to claim jobs - in HTML, change to if statement that only users with a worker profile can claim a job
         //TODO: add method to change worker.available=false and job.pending=true when job is claimed 
+        //[HttpPost]
+        //public IActionResult Claim(Job job)
+        //{
+        //    job.Worker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+        //    //job.Worker.Avaliable = false;
+        //    //job.Pending = true;
+        //    db.Entry(job).State = EntityState.Modified;
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
+
         [HttpPost]
         public IActionResult Claim(Job job)
         {
             job.Worker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+            job.Worker.Avaliable = false;
+            job.Pending = true;
             db.Entry(job).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(job);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace MrFixIt.Controllers
         //Checks to see if user has a worker profile, if not, redirects user to worker create page
         public IActionResult Index()
         {
-            var thisWorker = db.Workers.Include(i =>i.Jobs).FirstOrDefault(i => i.UserName == User.Identity.Name);
+            var thisWorker = db.Workers.Include(worker =>worker.Jobs).FirstOrDefault(worker => worker.UserName == User.Identity.Name);
             if (thisWorker != null)
             {
                 return View(thisWorker);
