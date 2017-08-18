@@ -22,12 +22,22 @@
 <div id="confirm-claim">
     <h2>Are you sure you want to claim this job?</h2>
     <hr />
-    <form action="Create" class="claim-form">
+
+    @using (Html.BeginForm(new { @class = "claim-form" }))
+    {
+        @Html.HiddenFor(model => model.JobId)
+        @Html.HiddenFor(model => model.Title)
+        @Html.HiddenFor(model => model.Description)
+
+        <h4>@Model.Title</h4>
+        <input type="submit" value="Claim" />
+    }
+    @*<form action="Create" class="claim-form">
         <input type="text" name=@Model.JobId hidden/>
         <input type="text" name=@Model.Title hidden/>
         <input type="text" name=@Model.Description hidden/>
         <button type="submit">Submit</button>
-    </form>
+    </form>*@
 
     @*@using (Html.BeginForm())
     {
