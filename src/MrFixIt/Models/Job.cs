@@ -18,7 +18,7 @@ namespace MrFixIt.Models
 
         public Worker FindWorker(string UserName)
         {
-            Worker thisWorker = new MrFixItContext().Workers.FirstOrDefault(i => i.UserName == UserName);
+            Worker thisWorker = new MrFixItContext().Workers.FirstOrDefault(worker => worker.UserName == UserName);
             return thisWorker;
         }
     }

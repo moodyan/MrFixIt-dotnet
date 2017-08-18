@@ -6,18 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using MrFixIt.Models;
 using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MrFixIt.Controllers
 {
     public class JobsController : Controller
     {
         private MrFixItContext db = new MrFixItContext();
-
-        // GET: /<controller>/
+        
         public IActionResult Index()
         {
-            return View(db.Jobs.Include(i => i.Worker).ToList());
+            return View(db.Jobs.Include(job => job.Worker).ToList());
         }
 
         public IActionResult Create()
@@ -35,14 +32,15 @@ namespace MrFixIt.Controllers
 
         public IActionResult Claim(int id)
         {
-            var thisItem = db.Jobs.FirstOrDefault(items => items.JobId == id);
-            return View(thisItem);
+            var thisJob = db.Jobs.FirstOrDefault(jobs => jobs.JobId == id);
+            return View(thisJob);
         }
-
+        //allows workers to claim jobs - in HTML, change to if statement that only users with a worker profile can claim a job
+        //TODO: add method to change worker.available=false and job.pending=true when job is claimed 
         [HttpPost]
         public IActionResult Claim(Job job)
         {
-            job.Worker = db.Workers.FirstOrDefault(i => i.UserName == User.Identity.Name);
+            job.Worker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
             db.Entry(job).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");

@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MrFixIt.Models;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MrFixIt.Controllers
 {
     public class HomeController : Controller
@@ -18,7 +16,7 @@ namespace MrFixIt.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var thisWorker = db.Workers.FirstOrDefault(item => item.UserName == User.Identity.Name);
+                var thisWorker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
                 return View(thisWorker);
             } else
             {

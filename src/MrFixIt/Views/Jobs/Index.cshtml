@@ -1,7 +1,6 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Mr Fix-It Jobs";
 }
 <div class="text-center">
     <h3>Our Current Jobs</h3>
@@ -14,6 +13,8 @@
         <ul>
             <li>@Job.Description</li>
         </ul>
+
+        @*Make another if statement to only show this if user is authenticated*@
         @if (Job.Worker == null)
         {
         <li class="btn">This job is unclaimed. @Html.ActionLink("Claim This Job", "Claim", new { @text = @Job.Title, id = Job.JobId })</li>
