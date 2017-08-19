@@ -38,19 +38,14 @@
                 @if (ViewBag.Worker != null)
                 {
                     <button class="btn claim-button" text=@job.Title data-id=@job.JobId>Claim This Job</button>
-                    @*@Html.ActionLink("Claim This Job", "Claim", new { @text = @job.Title, id = job.JobId, @class="btn claim-button" } )*@
                     <div id="confirm-claim"></div>
                 }
-            
             }
             else
             {
                 <p>This Job is claimed by @job.Worker.FirstName @job.Worker.LastName</p>
-
             }
     </ul>
-
-
     <hr />
 }
 

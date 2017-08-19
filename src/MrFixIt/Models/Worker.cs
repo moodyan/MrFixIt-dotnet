@@ -18,6 +18,7 @@ namespace MrFixIt.Models
         public bool Avaliable { get; set; }
         //username comes from Identity.User
         public string UserName { get; set; }
+        public int CurrentJobId { get; set; }
         public virtual ICollection<Job> Jobs { get; set; }
 
         public Worker()

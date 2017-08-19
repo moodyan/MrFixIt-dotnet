@@ -3,16 +3,48 @@
     ViewBag.Title = "Mr Fix-It Login";
 }
 
+<script type="text/javascript">
+    $(function () {
+        $('#mark-current').submit(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: 'GET',
+                datatype: 'html',
+                //data: { id: }
+                url: '@Url.Action("MarkCurrent", "Workers")',
+                //success: function (result) {
+                //    $('#fullPage').html(result);
+                //}
+            });
+        });
+        $('#mark-complete').submit(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: 'GET',
+                datatype: 'html',
+                url: '@Url.Action("MarkComplete", "Workers")',
+                //success: function (result) {
+                //    $('#fullPage').html(result);
+                //}
+            });
+        });
+    })
+</script>
+
 @if (User.Identity.IsAuthenticated)
 {
-
     <div class="text-center">
         <h4>Hello Worker @Model.FirstName @Model.LastName. You are Logged In</h4>
         <h3>Your Current Jobs:</h3>
         @foreach (var Job in Model.Jobs)
         {
             <h5>@Job.Title</h5>
-
+           @if (Model.Avaliable)
+           {
+        <form id="mark-current">
+            <input type="checkbox" value="submit" data-id=@Job.JobId>Current Job<br>
+        </form>
+           }
         }
         @if (Model.Avaliable)
         {
