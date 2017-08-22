@@ -21,17 +21,12 @@ namespace MrFixIt.Models
         public int CurrentJobId { get; set; }
         public int JobsClaimed { get; set; }
         public int JobsCompleted { get; set; }
+        public int JobsPending { get; set; }
         public virtual ICollection<Job> Jobs { get; set; }
 
         public Worker()
         {
             Available = true;
-        }
-
-        public int JobsPending()
-        {
-            var JobsPending = (JobsClaimed - JobsCompleted);
-            return JobsPending;
         }
 
     }

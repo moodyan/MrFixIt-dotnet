@@ -18,6 +18,8 @@ namespace MrFixIt.Controllers
             if (thisWorker != null)
             {
                 ViewBag.IncompleteJobs = thisWorker.Jobs.Where(job => !job.Completed);
+                thisWorker.JobsPending = (thisWorker.JobsClaimed - thisWorker.JobsCompleted);
+                db.SaveChanges();
                 return View(thisWorker);
             }
             else

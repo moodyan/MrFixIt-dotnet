@@ -13,6 +13,7 @@
                 data: $(this).serialize(),
                 success: function (result) {
                     $(".jobs").html(result);
+                    location.reload();
                  }
             });
         });
@@ -25,6 +26,7 @@
                 data: $(this).serialize(),
                 success: function (result) {
                     $(".jobs").html(result);
+                    location.reload();
                  }
             });
         });
@@ -38,11 +40,12 @@
         <div class="text-center">
             <h4>Hello @Model.FirstName @Model.LastName. You are Logged In</h4>
             <h3>Your Current Jobs:</h3>
-            @*FIX THIS SO IT ACCOUNTS FOR HAVING CLAIMED JOBS, BUT NO PENDING JOBS (Model.Available && (Model.JobsPending() == 0))*@
-            @if ((Model.Available && Model.JobsClaimed == 0))
+            @if ((Model.Available && Model.JobsClaimed == 0) || (Model.Available && Model.JobsPending == 0))
             {
-                <h2>You have not claimed any jobs. Please @Html.ActionLink("select a job", "Index", "Jobs").</h2>
+                <h2>You have no claimed jobs. Please @Html.ActionLink("select a job", "Index", "Jobs").</h2>
             }
+            
+            
             @foreach (var Job in ViewBag.IncompleteJobs)
             {
                 <div class="job">
