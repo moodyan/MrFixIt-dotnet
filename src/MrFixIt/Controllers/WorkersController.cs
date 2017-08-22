@@ -15,6 +15,7 @@ namespace MrFixIt.Controllers
         public IActionResult Index()
         {
             var thisWorker = db.Workers.Include(worker =>worker.Jobs).FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+            ViewBag.IncompleteJobs = thisWorker.Jobs.Where(job => !job.Completed);
             if (thisWorker != null)
             {
                 return View(thisWorker);
@@ -38,6 +39,40 @@ namespace MrFixIt.Controllers
             db.Workers.Add(worker); 
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult MarkCurrent(int id)
+        {
+            var thisJob = db.Jobs.FirstOrDefault(jobs => jobs.JobId == id);
+            var thisWorker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+            thisWorker.Available = false;
+            thisJob.Pending = true;
+            thisWorker.CurrentJobId = id;
+            db.SaveChanges();
+            return View("Index", "Workers");
+        }
+
+        [HttpPost]
+        public IActionResult MarkCompleted(int id)
+        {
+            var thisJob = db.Jobs.FirstOrDefault(jobs => jobs.JobId == id);
+            var thisWorker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+            thisWorker.Available = true;
+            thisJob.Pending = false;
+            thisJob.Completed = true;
+            thisWorker.CurrentJobId = 0;
+            thisWorker.JobsCompleted += 1;
+            db.SaveChanges();
+            return View("Index", "Workers");
+        }
+        //TODO: put this into action
+        public IActionResult CompletedJobs()
+        {
+            var thisWorker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+            ViewBag.CompletedJobs = thisWorker.Jobs.Where(job => job.Completed);
+            db.SaveChanges();
+            return View("Index", "Workers");
         }
     }
 }

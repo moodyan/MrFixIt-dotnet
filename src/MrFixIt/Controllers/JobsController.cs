@@ -42,44 +42,10 @@ namespace MrFixIt.Controllers
         public IActionResult Claim(Job job)
         {
             job.Worker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+            job.Worker.JobsClaimed += 1;
             db.Entry(job).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index"); ;
-        }
-
-        [HttpPost]
-        public IActionResult MarkCurrent(int jobId, int workerId)
-        {
-            Job thisJob = db.Jobs.FirstOrDefault(job => job.JobId == jobId);
-            thisJob.Pending = true;
-            db.Entry(thisJob).State = EntityState.Modified;
-            db.SaveChanges();
-
-            Worker thisWorker = db.Workers.FirstOrDefault(worker => worker.WorkerId == workerId);
-            thisWorker.CurrentJobId = jobId;
-            thisWorker.Avaliable = false;
-            db.Entry(thisWorker).State = EntityState.Modified;
-            db.SaveChanges();
-            
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public IActionResult MarkCompleted(int jobId, int workerId)
-        {
-            Job thisJob = db.Jobs.FirstOrDefault(job => job.JobId == jobId);
-            thisJob.Completed = true;
-            thisJob.Pending = false;
-            db.Entry(thisJob).State = EntityState.Modified;
-            db.SaveChanges();
-
-            Worker thisWorker = db.Workers.FirstOrDefault(worker => worker.WorkerId == workerId);
-            thisWorker.CurrentJobId = 0;
-            thisWorker.Avaliable = true;
-            db.Entry(thisWorker).State = EntityState.Modified;
-            db.SaveChanges();
-            
-            return RedirectToAction("Index");
         }
     }
 }

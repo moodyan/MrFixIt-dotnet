@@ -1,58 +1,72 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Mr Fix-It Login";
+    ViewBag.Title = "Workers";
 }
-
-<script type="text/javascript">
-    $(function () {
-        $('#mark-current').submit(function (event) {
+<script>
+    $(document).ready(function () {
+        $('.mark-current').submit(function (event) {
             event.preventDefault();
             $.ajax({
-                type: 'GET',
-                datatype: 'html',
-                //data: { id: }
                 url: '@Url.Action("MarkCurrent", "Workers")',
-                //success: function (result) {
-                //    $('#fullPage').html(result);
-                //}
+                type: 'POST',
+                dataType: 'html',
+                data: $(this).serialize(),
+                success: function (result) {
+                    location.reload();
+                 }
             });
         });
-        $('#mark-complete').submit(function (event) {
+        $('.mark-completed').submit(function (event) {
             event.preventDefault();
             $.ajax({
-                type: 'GET',
-                datatype: 'html',
-                url: '@Url.Action("MarkComplete", "Workers")',
-                //success: function (result) {
-                //    $('#fullPage').html(result);
-                //}
+                url: '@Url.Action("MarkCompleted", "Workers")',
+                type: 'POST',
+                dataType: 'html',
+                data: $(this).serialize(),
+                success: function (result) {
+                    location.reload();
+                 }
             });
         });
-    })
+    });
 </script>
+
 
 @if (User.Identity.IsAuthenticated)
 {
     <div class="text-center">
-        <h4>Hello Worker @Model.FirstName @Model.LastName. You are Logged In</h4>
+        <h4>Hello @Model.FirstName @Model.LastName. You are Logged In</h4>
         <h3>Your Current Jobs:</h3>
-        @foreach (var Job in Model.Jobs)
+        @*FIX THIS SO IT ACCOUNTS FOR HAVING CLAIMED JOBS, BUT NO PENDING JOBS*@
+        @if ((Model.Available && Model.JobsClaimed ==0) || (Model.Available && (Model.JobsPending() == 0)))
         {
-            <h5>@Job.Title</h5>
-           @if (Model.Avaliable)
-           {
-        <form id="mark-current">
-            <input type="checkbox" value="submit" data-id=@Job.JobId>Current Job<br>
-        </form>
-           }
+            <h2>You have not claimed any jobs. Please @Html.ActionLink("select a job", "Index", "Jobs").</h2>
         }
-        @if (Model.Avaliable)
+        @foreach (var Job in ViewBag.IncompleteJobs)
         {
-            <h2>Please @Html.ActionLink("select a job", "Index", "Jobs").</h2>
-        }
-        else
-        {
-            <p>You are already assigned to a job.</p>
+            <div class="job">
+                <h5>@Job.Title</h5>
+                @if (Model.Available)
+                {
+                    <form class="mark-current" action="MarkCurrent">
+                        <input type="hidden" value="@Job.JobId" name="id" />
+                        <button type="submit" id="@Job.JobId">Mark as Current Job</button>
+                    </form>
+                }
+                
+                @if ((!Model.Available) && (Job.JobId == Model.CurrentJobId))
+                {
+                    <p>ACTIVE JOB</p>
+                    <form class="mark-completed" action="MarkCompleted">
+                        <input type="hidden" value="@Job.JobId" name="id" />
+                        <button type="submit" id="@Job.JobId">Mark Job Completed</button>
+                    </form>
+                }
+                else
+                {
+                    <p>INACTIVE.</p>
+                }
+            </div>
         }
     </div>
 }

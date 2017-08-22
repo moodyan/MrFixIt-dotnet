@@ -15,15 +15,23 @@ namespace MrFixIt.Models
         public int WorkerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public bool Avaliable { get; set; }
+        public bool Available { get; set; }
         //username comes from Identity.User
         public string UserName { get; set; }
         public int CurrentJobId { get; set; }
+        public int JobsClaimed { get; set; }
+        public int JobsCompleted { get; set; }
         public virtual ICollection<Job> Jobs { get; set; }
 
         public Worker()
         {
-            Avaliable = true;
+            Available = true;
+        }
+
+        public int JobsPending()
+        {
+            var JobsPending = (JobsClaimed - JobsCompleted);
+            return JobsPending;
         }
 
     }

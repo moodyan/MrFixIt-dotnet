@@ -8,9 +8,10 @@ using MrFixIt.Models;
 namespace MrFixIt.Migrations
 {
     [DbContext(typeof(MrFixItContext))]
-    partial class MrFixItContextModelSnapshot : ModelSnapshot
+    [Migration("20170822000333_AddJobsCompletedColumn")]
+    partial class AddJobsCompletedColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.3")
@@ -204,8 +205,6 @@ namespace MrFixIt.Migrations
                     b.Property<int>("CurrentJobId");
 
                     b.Property<string>("FirstName");
-
-                    b.Property<int>("JobsClaimed");
 
                     b.Property<int>("JobsCompleted");
 
