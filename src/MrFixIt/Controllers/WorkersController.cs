@@ -15,9 +15,9 @@ namespace MrFixIt.Controllers
         public IActionResult Index()
         {
             var thisWorker = db.Workers.Include(worker =>worker.Jobs).FirstOrDefault(worker => worker.UserName == User.Identity.Name);
-            ViewBag.IncompleteJobs = thisWorker.Jobs.Where(job => !job.Completed);
             if (thisWorker != null)
             {
+                ViewBag.IncompleteJobs = thisWorker.Jobs.Where(job => !job.Completed);
                 return View(thisWorker);
             }
             else
@@ -50,7 +50,7 @@ namespace MrFixIt.Controllers
             thisJob.Pending = true;
             thisWorker.CurrentJobId = id;
             db.SaveChanges();
-            return View("Index", "Workers");
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -64,7 +64,7 @@ namespace MrFixIt.Controllers
             thisWorker.CurrentJobId = 0;
             thisWorker.JobsCompleted += 1;
             db.SaveChanges();
-            return View("Index", "Workers");
+            return RedirectToAction("Index");
         }
         //TODO: put this into action
         public IActionResult CompletedJobs()
@@ -72,7 +72,7 @@ namespace MrFixIt.Controllers
             var thisWorker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
             ViewBag.CompletedJobs = thisWorker.Jobs.Where(job => job.Completed);
             db.SaveChanges();
-            return View("Index", "Workers");
+            return RedirectToAction("Index");
         }
     }
 }

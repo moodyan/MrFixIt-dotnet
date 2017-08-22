@@ -15,7 +15,7 @@ namespace MrFixIt.Migrations
             migrationBuilder.AddColumn<bool>(
                 name: "Available",
                 table: "Workers",
-                nullable: false,
+                nullable: true,
                 defaultValue: true);
         }
 
@@ -28,7 +28,7 @@ namespace MrFixIt.Migrations
             migrationBuilder.AddColumn<bool>(
                 name: "Avaliable",
                 table: "Workers",
-                nullable: true,
+                nullable: false,
                 defaultValue: false);
         }
     }

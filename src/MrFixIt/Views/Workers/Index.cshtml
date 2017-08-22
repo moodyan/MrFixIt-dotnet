@@ -12,7 +12,7 @@
                 dataType: 'html',
                 data: $(this).serialize(),
                 success: function (result) {
-                    location.reload();
+                    $(".jobs").html(result);
                  }
             });
         });
@@ -24,7 +24,7 @@
                 dataType: 'html',
                 data: $(this).serialize(),
                 success: function (result) {
-                    location.reload();
+                    $(".jobs").html(result);
                  }
             });
         });
@@ -34,39 +34,41 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div class="text-center">
-        <h4>Hello @Model.FirstName @Model.LastName. You are Logged In</h4>
-        <h3>Your Current Jobs:</h3>
-        @*FIX THIS SO IT ACCOUNTS FOR HAVING CLAIMED JOBS, BUT NO PENDING JOBS*@
-        @if ((Model.Available && Model.JobsClaimed ==0) || (Model.Available && (Model.JobsPending() == 0)))
-        {
-            <h2>You have not claimed any jobs. Please @Html.ActionLink("select a job", "Index", "Jobs").</h2>
-        }
-        @foreach (var Job in ViewBag.IncompleteJobs)
-        {
-            <div class="job">
-                <h5>@Job.Title</h5>
-                @if (Model.Available)
-                {
-                    <form class="mark-current" action="MarkCurrent">
-                        <input type="hidden" value="@Job.JobId" name="id" />
-                        <button type="submit" id="@Job.JobId">Mark as Current Job</button>
-                    </form>
-                }
-                
-                @if ((!Model.Available) && (Job.JobId == Model.CurrentJobId))
-                {
-                    <p>ACTIVE JOB</p>
-                    <form class="mark-completed" action="MarkCompleted">
-                        <input type="hidden" value="@Job.JobId" name="id" />
-                        <button type="submit" id="@Job.JobId">Mark Job Completed</button>
-                    </form>
-                }
-                else
-                {
-                    <p>INACTIVE.</p>
-                }
-            </div>
-        }
+        <div class="jobs">
+        <div class="text-center">
+            <h4>Hello @Model.FirstName @Model.LastName. You are Logged In</h4>
+            <h3>Your Current Jobs:</h3>
+            @*FIX THIS SO IT ACCOUNTS FOR HAVING CLAIMED JOBS, BUT NO PENDING JOBS (Model.Available && (Model.JobsPending() == 0))*@
+            @if ((Model.Available && Model.JobsClaimed == 0))
+            {
+                <h2>You have not claimed any jobs. Please @Html.ActionLink("select a job", "Index", "Jobs").</h2>
+            }
+            @foreach (var Job in ViewBag.IncompleteJobs)
+            {
+                <div class="job">
+                    <h5>@Job.Title</h5>
+                    @if (Model.Available)
+                    {
+                        <form class="mark-current">
+                            <input type="hidden" value="@Job.JobId" name="id" />
+                            <button type="submit" id="@Job.JobId">Mark as Current Job</button>
+                        </form>
+                    }
+
+                    @if ((!Model.Available) && (Job.JobId == Model.CurrentJobId))
+                    {
+                        <p>ACTIVE JOB</p>
+                        <form class="mark-completed" action="MarkCompleted">
+                            <input type="hidden" value="@Job.JobId" name="id" />
+                            <button type="submit" id="@Job.JobId">Mark Job Completed</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>INACTIVE.</p>
+                    }
+                </div>
+            }
+        </div>
     </div>
 }

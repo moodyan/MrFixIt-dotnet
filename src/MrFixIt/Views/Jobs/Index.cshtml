@@ -3,21 +3,7 @@
     ViewBag.Title = "Mr Fix-It Jobs";
 }
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.claim-button').click(function () {
-            $.ajax({
-                type: 'GET',
-                dataType: 'html',
-                url: '@Url.Action("Claim")',
-                data: { id: $(this).data('id'), text: $(this).data('job') },
-                success: function (result) {
-                    $('#confirm-claim').html(result);
-                }
-            });
-        });
-    });
-</script>
+
 
 <div class="text-center">
     <h3>Our Current Jobs</h3>
@@ -26,6 +12,22 @@
 
 @foreach (var job in Model)
 {
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#@job.JobId').click(function () {
+            $.ajax({
+                type: 'GET',
+                dataType: 'html',
+                url: '@Url.Action("Claim")',
+                data: { id: $(this).data('id'), text: $(this).data('job') },
+                success: function (result) {
+                    $('.@job.JobId').html(result).toggle();
+                }
+            });
+            console.log('confirm-claim-' + $(this).data('id'));
+        });
+    });
+    </script>
     <ul>
         <li>@job.Title</li>
         <ul>
@@ -37,8 +39,8 @@
             <p>This job is unclaimed.</p> 
                 @if (ViewBag.Worker != null)
                 {
-                    <button class="btn claim-button" text=@job.Title data-id=@job.JobId>Claim This Job</button>
-                    <div id="confirm-claim"></div>
+                    <button class="btn claim-button" text=@job.Title data-id=@job.JobId id="@job.JobId">Claim This Job</button>
+                    <div class="@job.JobId"></div>
                 }
             }
             else
