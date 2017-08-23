@@ -44,33 +44,47 @@
             {
                 <h2>You have no claimed jobs. Please @Html.ActionLink("select a job", "Index", "Jobs").</h2>
             }
-            
-            
-            @foreach (var Job in ViewBag.IncompleteJobs)
+            @if (Model.JobsClaimed != 0 && Model.JobsPending != 0)
             {
-                <div class="job">
-                    <h5>@Job.Title</h5>
-                    @if (Model.Available)
+                <table>
+                    <tr>
+                        <th>Job</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    @foreach (var Job in ViewBag.IncompleteJobs)
                     {
-                        <form class="mark-current">
-                            <input type="hidden" value="@Job.JobId" name="id" />
-                            <button type="submit" id="@Job.JobId">Mark as Current Job</button>
-                        </form>
+                        <tr>
+                            <td>@Job.Title</td>
+                            <td>
+                                @if ((!Model.Available) && (Job.JobId == Model.CurrentJobId))
+                        {
+                                    <p>ACTIVE</p>
+                                }
+                                else
+                                {
+                                    <p>INACTIVE</p>
+                                }
+                            </td>
+                            <td>
+                                @if ((!Model.Available) && (Job.JobId == Model.CurrentJobId))
+                        {
+                                    <form class="mark-completed" action="MarkCompleted">
+                                        <input type="hidden" value="@Job.JobId" name="id" />
+                                        <button type="submit" id="@Job.JobId" class="btn btn-default">Mark Job Completed</button>
+                                    </form>
+                                }
+                                @if (Model.Available)
+                        {
+                                    <form class="mark-current">
+                                        <input type="hidden" value="@Job.JobId" name="id" />
+                                        <button type="submit" id="@Job.JobId" class="btn btn-default">Mark as Current Job</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
                     }
-
-                    @if ((!Model.Available) && (Job.JobId == Model.CurrentJobId))
-                    {
-                        <p>ACTIVE JOB</p>
-                        <form class="mark-completed" action="MarkCompleted">
-                            <input type="hidden" value="@Job.JobId" name="id" />
-                            <button type="submit" id="@Job.JobId">Mark Job Completed</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <p>INACTIVE.</p>
-                    }
-                </div>
+                </table>
             }
         </div>
     </div>

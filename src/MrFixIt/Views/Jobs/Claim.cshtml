@@ -11,7 +11,7 @@
                 data: $(this).serialize(),
                 success: function (result) {
                     var resultMessage = 'You\'ve successfully claimed this job!';
-                    $('#result').html(resultMessage);
+                    alert(resultMessage);
                     $('#confirm-claim').hide();
                 }
             });
@@ -20,18 +20,13 @@
 </script>
 
 <div id="confirm-claim">
-    <h2>Are you sure you want to claim this job?</h2>
+    <h4>Are you sure you want to claim @Model.Title?</h4>
     <hr />
-
     @using (Html.BeginForm(new { @class = "claim-form" }))
     {
         @Html.HiddenFor(model => model.JobId)
         @Html.HiddenFor(model => model.Title)
         @Html.HiddenFor(model => model.Description)
-
-        <h4>@Model.Title</h4>
-        <input type="submit" value="Claim" />
+        <input type="submit" value="Claim" class="btn btn-default" id="claim-button" />
     }
-   
 </div>
-<div id="result"></div>

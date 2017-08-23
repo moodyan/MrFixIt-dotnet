@@ -6,29 +6,25 @@
 @using System.Security.Claims
 @model MrFixIt.Models.Worker
 
-<html>
-<head>
-    <title>Create</title>
-</head>
-<body>
-    <h2>Create</h2>
+@if (User.Identity.IsAuthenticated)
+{
+    <h2>Create A Worker Profile</h2>
     <hr />
-    @if (User.Identity.IsAuthenticated)
+    <h4>You do not have a complete worker profile. Please create your worker profile</h4>
+    @using (Html.BeginForm())
     {
-        <h4>You do not have a complete worker profile. Please create your worker profile</h4>
-        @using (Html.BeginForm())
-        {
-            @Html.LabelFor(model => model.FirstName)
-            @Html.TextBoxFor(model => model.FirstName)
-            @Html.LabelFor(model => model.LastName)
-            @Html.TextBoxFor(model => model.LastName)
+        @Html.LabelFor(model => model.FirstName)
+        @Html.TextBoxFor(model => model.FirstName)
+        @Html.LabelFor(model => model.LastName)
+        @Html.TextBoxFor(model => model.LastName)
 
 
-            <input type="submit" value="Register" />
-        }
+        <input type="submit" value="Register" class="btn btn-default" />
     }
 
-
-
-</body>
-</html>
+}
+else
+{
+    <h2>Access Denied</h2>
+    <p>Please @Html.ActionLink("Register Here", "Register", "Account") before creating a worker profile.</p>
+}

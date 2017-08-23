@@ -10,44 +10,69 @@
     @Html.ActionLink("Add a new job", "Create")
 </div>
 
-@foreach (var job in Model)
-{
-    <script type="text/javascript">
-    $(document).ready(function () {
-        $('#@job.JobId').click(function () {
-            $.ajax({
-                type: 'GET',
-                dataType: 'html',
-                url: '@Url.Action("Claim")',
-                data: { id: $(this).data('id'), text: $(this).data('job') },
-                success: function (result) {
-                    $('.@job.JobId').html(result).toggle();
-                }
+<table>
+    <tr>
+        <th>Job Name</th>
+        <th>Description</th>
+        <th>Claimed?</th>
+        <th>Status</th>
+    </tr>
+    @foreach (var job in Model)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.@job.JobId').hide();
+                $('#@job.JobId').click(function () {
+                    $.ajax({
+                        type: 'GET',
+                        dataType: 'html',
+                        url: '@Url.Action("Claim")',
+                        data: { id: $(this).data('id'), text: $(this).data('job') },
+                        success: function (result) {
+                            $('.@job.JobId').html(result).toggle();
+                        }
+                    });
+
+                });
             });
-            console.log('confirm-claim-' + $(this).data('id'));
-        });
-    });
-    </script>
-    <ul>
-        <li>@job.Title</li>
-        <ul>
-            <li>@job.Description</li>
-        </ul>
-       
-            @if (job.Worker == null)
-            {
-            <p>This job is unclaimed.</p> 
-                @if (ViewBag.Worker != null)
+        </script>
+
+        <tr>
+            <td>@job.Title</td>
+            <td>@job.Description</td>
+            <td>
+                @if (job.Worker == null)
                 {
-                    <button class="btn claim-button" text=@job.Title data-id=@job.JobId id="@job.JobId">Claim This Job</button>
-                    <div class="@job.JobId"></div>
+                    <p>Unclaimed</p>
+                    @if (ViewBag.Worker != null)
+                    {
+                        <button class="btn claim-button" text=@job.Title data-id=@job.JobId id="@job.JobId">Claim This Job</button>
+                        <div class="@job.JobId" id="claim"></div>
+                    }
                 }
-            }
-            else
-            {
-                <p>This Job is claimed by @job.Worker.FirstName @job.Worker.LastName</p>
-            }
-    </ul>
-    <hr />
-}
+                else
+                {
+                    <p>Claimed by @job.Worker.FirstName @job.Worker.LastName</p>
+                }
+            </td>
+            <td>
+                @if(job.Pending)
+                {
+                    <p>Pending</p>
+
+                }
+                else if (job.Completed)
+                {
+                    <p>Completed</p>
+                }
+                else
+                {
+                    <p>Unclaimed</p>
+
+                }
+            </td>
+        </tr>
+    }
+</table>
+
 
