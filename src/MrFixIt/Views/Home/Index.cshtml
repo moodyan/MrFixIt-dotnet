@@ -5,7 +5,7 @@
 
 <h4>Welcome to Mr Fix-It</h4>
 
-@if (User.Identity.IsAuthenticated)
+@if (User.Identity.IsAuthenticated && Model.FirstName !=null)
 {
     <p>@User.Identity.Name</p>
     <p>@Model.FirstName @Model.LastName</p>

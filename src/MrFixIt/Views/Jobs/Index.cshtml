@@ -3,8 +3,6 @@
     ViewBag.Title = "Mr Fix-It Jobs";
 }
 
-
-
 <div class="text-center">
     <h3>Our Current Jobs</h3>
     @Html.ActionLink("Add a new job", "Create")
@@ -14,8 +12,11 @@
     <tr>
         <th>Job Name</th>
         <th>Description</th>
-        <th>Claimed?</th>
-        <th>Status</th>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <th>Claimed?</th>
+            <th>Status</th>
+        }
     </tr>
     @foreach (var job in Model)
     {
@@ -40,6 +41,8 @@
         <tr>
             <td>@job.Title</td>
             <td>@job.Description</td>
+            @if (User.Identity.IsAuthenticated)
+            {
             <td>
                 @if (job.Worker == null)
                 {
@@ -56,7 +59,7 @@
                 }
             </td>
             <td>
-                @if(job.Pending)
+                @if (job.Pending)
                 {
                     <p>Pending</p>
 
@@ -65,12 +68,17 @@
                 {
                     <p>Completed</p>
                 }
+                else if (job.Worker != null)
+                {
+                    <p>Claimed</p>
+                }
                 else
                 {
                     <p>Unclaimed</p>
 
                 }
             </td>
+            }
         </tr>
     }
 </table>

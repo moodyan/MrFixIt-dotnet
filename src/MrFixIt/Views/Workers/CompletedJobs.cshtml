@@ -1,0 +1,33 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Your Completed Jobs";
+}
+
+<h2>Completed Jobs</h2>
+@if (Model.JobsCompleted == 0)
+{
+    <p>You have not completed any jobs.</p>
+}
+else
+{
+    <table>
+        <tr>
+            <th>Job</th>
+            <th>Description</th>
+            <th>Status</th>
+        </tr>
+        @foreach (var job in ViewBag.CompletedJobs)
+        {
+            <tr>
+                <td>@job.Title</td>
+                <td>
+                    @job.Description
+                </td>
+                <td>
+                    <p>Completed</p>
+                </td>
+            </tr>
+        }
+    </table>
+}
+@Html.ActionLink("Back to Worker Profile", "Index", "Workers")

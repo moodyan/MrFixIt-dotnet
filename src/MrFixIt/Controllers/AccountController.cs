@@ -13,7 +13,6 @@ namespace MrFixIt.Controllers
     {
         private MrFixItContext db = new MrFixItContext();
 
-
         //Basic User Account Info here...
         private readonly MrFixItContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -48,15 +47,29 @@ namespace MrFixIt.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            var user = new ApplicationUser { UserName = model.Email };
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index");
+                return await RegisterLogin(user, model.Password);
             }
             else
             {
                 return View();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterLogin(ApplicationUser user, string password)
+        {
+            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(user.Email, password, isPersistent: true, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Create", "Workers");
+            }
+            else
+            {
+                return RedirectToAction("Register");
             }
         }
 

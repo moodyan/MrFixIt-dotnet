@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MrFixIt.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MrFixIt.Controllers
 {
@@ -18,6 +19,8 @@ namespace MrFixIt.Controllers
             if (thisWorker != null)
             {
                 ViewBag.IncompleteJobs = thisWorker.Jobs.Where(job => !job.Completed);
+                ViewBag.CompletedJobs = thisWorker.Jobs.Where(job => job.Completed);
+
                 thisWorker.JobsPending = (thisWorker.JobsClaimed - thisWorker.JobsCompleted);
                 db.SaveChanges();
                 return View(thisWorker);
@@ -68,13 +71,12 @@ namespace MrFixIt.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        //TODO: put this into action
         public IActionResult CompletedJobs()
         {
-            var thisWorker = db.Workers.FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+            var thisWorker = db.Workers.Include(worker => worker.Jobs).FirstOrDefault(worker => worker.UserName == User.Identity.Name);
+            ViewBag.AllJobs = thisWorker.Jobs;
             ViewBag.CompletedJobs = thisWorker.Jobs.Where(job => job.Completed);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return View(thisWorker);
         }
     }
 }

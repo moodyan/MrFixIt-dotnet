@@ -86,6 +86,10 @@
                     }
                 </table>
             }
+            @if(Model.JobsCompleted != 0)
+            {
+                @Html.ActionLink("Completed Jobs", "CompletedJobs")
+            }
         </div>
     </div>
 }
