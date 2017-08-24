@@ -6,19 +6,20 @@
 @using MrFixIt.ViewModels
 
 @model RegisterViewModel
-
-<h2>Register a new worker</h2>
-<hr />
-@using (Html.BeginForm("Register", "Account", FormMethod.Post))
-{
-    @Html.LabelFor(m => m.Email)
-    @Html.TextBoxFor(m => m.Email)
-
-    @Html.LabelFor(m => m.Password)
-    @Html.PasswordFor(m => m.Password)
-
-    @Html.LabelFor(m => m.ConfirmPassword)
-    @Html.PasswordFor(m => m.ConfirmPassword)
-
-    <input type="submit" value="Register" class="btn btn-default" />
-}
+<div class="container">
+    <h2>Register a new worker</h2>
+    <hr />
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+    {
+        @Html.LabelFor(m => m.Email, new { @class = "labels" })
+        @Html.TextBoxFor(m => m.Email)
+        <br /><br />
+        @Html.LabelFor(m => m.Password, new { @class = "labels" })
+        @Html.PasswordFor(m => m.Password)
+        <br /><br />
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "labels" })
+        @Html.PasswordFor(m => m.ConfirmPassword)
+        <br /><br />
+        <input type="submit" value="Register" class="btn btn-default" />
+    }
+</div>

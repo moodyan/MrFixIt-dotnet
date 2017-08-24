@@ -3,84 +3,85 @@
     ViewBag.Title = "Mr Fix-It Jobs";
 }
 
-<div class="text-center">
-    <h3>Our Current Jobs</h3>
-    @Html.ActionLink("Add a new job", "Create")
-</div>
+<div class="container">
+    <div class="text-center">
+        <h3>Our Current Jobs</h3>
+        @Html.ActionLink("Add a new job", "Create")
+    </div>
 
-<table>
-    <tr>
-        <th>Job Name</th>
-        <th>Description</th>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <th>Claimed?</th>
-            <th>Status</th>
-        }
-    </tr>
-    @foreach (var job in Model)
-    {
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('.@job.JobId').hide();
-                $('#@job.JobId').click(function () {
-                    $.ajax({
-                        type: 'GET',
-                        dataType: 'html',
-                        url: '@Url.Action("Claim")',
-                        data: { id: $(this).data('id'), text: $(this).data('job') },
-                        success: function (result) {
-                            $('.@job.JobId').html(result).toggle();
-                        }
-                    });
-
-                });
-            });
-        </script>
-
+    <table>
         <tr>
-            <td>@job.Title</td>
-            <td>@job.Description</td>
+            <th>Job Name</th>
+            <th>Description</th>
             @if (User.Identity.IsAuthenticated)
             {
-            <td>
-                @if (job.Worker == null)
-                {
-                    <p>Unclaimed</p>
-                    @if (ViewBag.Worker != null)
-                    {
-                        <button class="btn claim-button" text=@job.Title data-id=@job.JobId id="@job.JobId">Claim This Job</button>
-                        <div class="@job.JobId" id="claim"></div>
-                    }
-                }
-                else
-                {
-                    <p>Claimed by @job.Worker.FirstName @job.Worker.LastName</p>
-                }
-            </td>
-            <td>
-                @if (job.Pending)
-                {
-                    <p>Pending</p>
-
-                }
-                else if (job.Completed)
-                {
-                    <p>Completed</p>
-                }
-                else if (job.Worker != null)
-                {
-                    <p>Claimed</p>
-                }
-                else
-                {
-                    <p>Unclaimed</p>
-
-                }
-            </td>
+                <th>Claimed?</th>
+                <th>Status</th>
             }
         </tr>
-    }
-</table>
+        @foreach (var job in Model)
+        {
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('.@job.JobId').hide();
+                    $('#@job.JobId').click(function () {
+                        $.ajax({
+                            type: 'GET',
+                            dataType: 'html',
+                            url: '@Url.Action("Claim")',
+                            data: { id: $(this).data('id'), text: $(this).data('job') },
+                            success: function (result) {
+                                $('.@job.JobId').html(result).toggle();
+                            }
+                        });
 
+                    });
+                });
+            </script>
+
+            <tr>
+                <td>@job.Title</td>
+                <td>@job.Description</td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                <td>
+                    @if (job.Worker == null)
+                    {
+                        <p>Unclaimed</p>
+                        @if (ViewBag.Worker != null)
+                        {
+                            <button class="btn claim-button" text=@job.Title data-id=@job.JobId id="@job.JobId">Claim This Job</button>
+                            <div class="@job.JobId" id="claim"></div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Claimed by @job.Worker.FirstName @job.Worker.LastName</p>
+                    }
+                </td>
+                <td>
+                    @if (job.Pending)
+                    {
+                        <p>Pending</p>
+
+                    }
+                    else if (job.Completed)
+                    {
+                        <p>Completed</p>
+                    }
+                    else if (job.Worker != null)
+                    {
+                        <p>Claimed</p>
+                    }
+                    else
+                    {
+                        <p>Unclaimed</p>
+
+                    }
+                </td>
+                }
+            </tr>
+        }
+    </table>
+</div>
 

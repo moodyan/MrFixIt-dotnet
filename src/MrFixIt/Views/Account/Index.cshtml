@@ -5,17 +5,21 @@
 
 @using System.Security.Claims
 
-<h2>Mr. Fix-It</h2>
-<hr />
-@if (User.Identity.IsAuthenticated)
-{
-    <h4>Hello @User.Identity.Name!</h4>
+<div class="container">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h4>Hello @User.Identity.Name!</h4>
 
-} else
-{
-    <p>@Html.ActionLink("Register", "Register")</p>
-    <p>@Html.ActionLink("Log in", "Login")</p>
-}
+    } else
+    {
+        <div class="text-center">
+            <h2>Welcome to Mr.Fix-It</h2>
+                <h3 id="login-screen">Login or Register</h3>
+                <button class="btn-primary btn-lg">@Html.ActionLink("Register", "Register")</button>
+                <button class="btn-primary btn-lg">@Html.ActionLink("Log in", "Login")</button>
+        </div>
+    }
+</div>
 
 
 

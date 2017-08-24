@@ -19,7 +19,6 @@ namespace MrFixIt.Controllers
             if (thisWorker != null)
             {
                 ViewBag.IncompleteJobs = thisWorker.Jobs.Where(job => !job.Completed);
-                ViewBag.CompletedJobs = thisWorker.Jobs.Where(job => job.Completed);
 
                 thisWorker.JobsPending = (thisWorker.JobsClaimed - thisWorker.JobsCompleted);
                 db.SaveChanges();
@@ -74,7 +73,6 @@ namespace MrFixIt.Controllers
         public IActionResult CompletedJobs()
         {
             var thisWorker = db.Workers.Include(worker => worker.Jobs).FirstOrDefault(worker => worker.UserName == User.Identity.Name);
-            ViewBag.AllJobs = thisWorker.Jobs;
             ViewBag.CompletedJobs = thisWorker.Jobs.Where(job => job.Completed);
             return View(thisWorker);
         }

@@ -1,6 +1,28 @@
 ﻿body {
-  padding-top: 70px;
-  color: navy; }
+  color: navy;
+  font-family: 'Montserrat', sans-serif;
+  padding-top: 50px; }
+
+.header {
+  background-image: url("../img/bkg3.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto;
+  width: 100vw;
+  height: 40vh;
+  text-align: right;
+  padding: 20px; }
+  .header h2 {
+    padding-top: 60px;
+    font-size: 50px;
+    color: white;
+    font-weight: bold; }
+
+.labels {
+  padding-right: 10px; }
+
+nav, .navbar, navbar-inverse {
+  margin-bottom: 0px; }
 
 table {
   width: 100%;
@@ -33,9 +55,21 @@ table {
   background-color: #D9391C;
   color: white; }
 
+.home {
+  width: 100vw; }
+
+#login-screen {
+  padding-top: 30px; }
+
 .btn {
   background-color: darkslategrey;
   color: white; }
+
+.btn-lg {
+  margin: 10px;
+  padding: 20px; }
+  .btn-lg a {
+    color: white; }
 
 .btn:hover {
   background-color: dimgrey;
